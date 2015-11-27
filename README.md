@@ -5,7 +5,7 @@ simple algorithmic analyze and strategy trading
 
 如需要交易部分，请自行写模块接入通讯组件即可。
 
-组件之间通讯需要使用同作者写的 [SimpleMsgChan](github.com/6xiao/go/SimpleMsgChan)
+组件之间通讯需要使用同作者写的 [SimpleMsgChan](https://github.com/6xiao/go/SimpleMsgChan)
 
 由以下模块组成：
 
