@@ -1,0 +1,313 @@
+package DataType;
+
+enum ConstDefine
+{
+	E_ReqSendOrder 	    	= 1;
+	E_RspSendOrder		= 2;
+	E_ReqCancelOrder	= 3;
+	E_RspCancelOrder	= 4;
+	E_ReqOrdersInfo		= 5;
+	E_RspOrdersInfo		= 6;
+	E_ReqPosition		= 7;
+	E_RspPosition		= 8;
+	E_ReqAccount	    	= 9;
+	E_RspAccount	    	= 10;
+	E_ReqAlgoOrder		= 11;
+	E_RspAlgoOrder		= 12;
+	E_ReqTickerInfo		= 13;
+	E_RspTickerInfo		= 14;
+	E_DepthMarketData 	= 100;
+	E_StaticMarketData 	= 101;
+	E_ReqKLine		= 102;
+	E_RspKLine		= 103;
+	E_ReqTick		= 104;
+	E_RspTick		= 105;
+	E_HeartBeat		= 1000000;
+}
+
+enum OrderStatus
+{
+	OrderStatus_NIL	 		= 0;
+	OrderStatus_New 		= 1;
+	OrderStatus_PartFill		= 2;
+	OrderStatus_PartFillPartCancel	= 3;
+	OrderStatus_Filled		= 4;
+	OrderStatus_Rejected		= 5;
+	OrderStatus_Canceling		= 6;
+	OrderStatus_Canceled		= 7;
+}
+
+enum OrderDirect
+{
+	OrderDirect_Buy			= 1;
+	OrderDirect_Sell		= 2;
+}
+
+enum OrderOpenClose
+{
+	OrderOpenClose_Open		= 1;
+	OrderOpenClose_Close		= 2;
+}
+
+message OrderInfo
+{
+	optional string TickerName 		= 1;
+	optional string Account			= 2;
+	optional uint64	Time			= 3 [default = 0];
+	optional uint64 Volume 			= 4 [default = 0]; 
+	optional double Price 			= 5 [default = 0]; 
+	optional uint64 LastFilled		= 6 [default = 0];
+	optional uint64 TotalFilled		= 7 [default = 0]; 
+	optional string Explain			= 8;
+	optional OrderStatus Status		= 9;
+	optional OrderDirect Direct		= 10;
+	optional OrderOpenClose OpenClose	= 11;
+	optional string OrderID			= 12; 
+	optional bool IsForce 			= 13 [default = false];
+	optional bool IsToday			= 14 [default = true];
+	optional uint64 LastMatchTime		= 15 [default = 0];
+} 
+
+message PositionInfo
+{
+	optional string TickerName 		= 1;
+	optional string Account			= 2;
+	optional double LongAvgPrice		= 3;
+	optional double ShortAvgPrice		= 4;
+	optional uint64 ValidLongVolume		= 5 [default = 0];
+	optional uint64 ClosingLongVolume	= 6 [default = 0];
+	optional uint64 QueuingLongVolume	= 7 [default = 0];
+	optional uint64 ValidShortVolume	= 8 [default = 0];
+	optional uint64 ClosingShortVolume	= 9 [default = 0];
+	optional uint64 QueuingShortVolume	= 10 [default = 0];
+	optional double Margin			= 11 [default = 0];
+}
+
+message TimeDuration
+{
+	optional uint64 StartTime 		= 1;
+	optional uint64 EndTime			= 2;
+}
+
+message AlgoInfo
+{
+	repeated TimeDuration ValidTimes	= 1;
+	optional string TickerName		= 2;
+	optional string Account			= 3;
+	optional string StrategyName		= 4;
+	optional string ExchangeName		= 5;
+	optional string QuoteName 		= 6;
+	optional string AlgoName		= 7;
+	optional double MaxLongPrice		= 8;
+	optional double MinShortPrice		= 9;
+	optional uint64 LongVolume		= 10 [default = 0];
+	optional uint64 ShortVolume		= 11 [default = 0];
+	optional bool 	Force			= 12 [default = false];
+}
+
+message ReqTickerInfo
+{
+	optional string TickerName		= 1;
+	optional ConstDefine Type 		= 2 [default = E_ReqTickerInfo];
+}
+
+message RspTickerInfo
+{
+	optional string TickerName 		= 1;
+	optional uint64 Multiplier 		= 2;
+	optional double MinMove			= 3;
+	optional double Margin			= 4;
+	repeated TimeDuration TradingSession	= 5;
+	optional ConstDefine Type 		= 6 [default = E_RspTickerInfo];
+}
+
+message ReqSendOrder
+{
+	optional string TickerName		= 1;
+	optional string Account			= 2;
+	optional OrderDirect Direct		= 3;
+	optional OrderOpenClose OpenClose	= 4;
+	optional uint64	Volume			= 5; 
+	optional double Price			= 6;
+	optional double LastPrice 		= 7; 
+	optional ConstDefine Type 		= 8 [default = E_ReqSendOrder];
+}
+
+message RspSendOrder
+{
+	optional OrderInfo LastReport		= 1;
+	optional ConstDefine Type		= 2 [default = E_RspSendOrder];
+}
+
+message ReqCancelOrder
+{
+	optional string TickerName		= 1;
+	optional string Account 		= 2;
+	optional string OrderID			= 3;
+	optional ConstDefine Type		= 4 [default = E_ReqCancelOrder];
+}
+
+message RspCancelOrder
+{
+	optional OrderInfo LastReport		= 1;
+	optional ConstDefine Type 		= 2 [default = E_RspCancelOrder];
+}
+
+message ReqOrdersInfo
+{
+	optional string TickerName		= 1; 
+	optional string Account			= 2;
+	optional OrderStatus ReqStatus		= 3;
+	optional ConstDefine Type 		= 4 [default = E_ReqOrdersInfo];
+}
+
+message RspOrdersInfo
+{
+	repeated OrderInfo Order		= 1;
+	optional ConstDefine Type 	 	= 2 [default = E_RspOrdersInfo];
+}
+
+message ReqPosition
+{
+	optional string TickerName 		= 1;
+	optional string Account			= 2;
+	optional ConstDefine Type 		= 3 [default = E_ReqPosition];
+}
+
+message RspPosition
+{
+	repeated PositionInfo Position		= 1;
+	optional ConstDefine Type		= 2 [default = E_RspPosition];
+}
+
+message ReqAccount
+{
+	optional string Account 		= 1;
+	optional ConstDefine Type		= 2 [default = E_ReqAccount];
+}
+
+message RspAccount
+{
+	optional string Account 		= 1;
+	optional double Available		= 2;
+	optional double Margin			= 3;
+	repeated PositionInfo Positions 	= 4;
+	repeated OrderInfo Orders		= 5;
+	optional ConstDefine Type 		= 6 [default = E_RspAccount];
+}
+
+message ReqAlgoOrder
+{
+	optional AlgoInfo  Algo			= 1;
+	optional ConstDefine Type 		= 2 [default = E_ReqAlgoOrder];
+}
+
+message RspAlgoOrder
+{
+	optional AlgoInfo  Algo			= 1;
+	optional ConstDefine Type 		= 2 [default = E_RspAlgoOrder];
+}
+
+message DepthMarketData
+{
+	optional string TickerName		= 1;
+	optional uint64 Time	 		= 2;
+	optional uint64 Volume			= 3;
+	optional uint64 OpenInterest 		= 4;
+	optional double Turnover		= 5;
+	optional double LastPrice 		= 6;
+	repeated double BuyPrice 		= 7;
+	repeated double SellPrice 		= 8;
+	repeated uint64 BuyVolume 		= 9;
+	repeated uint64 SellVolume 		= 10;
+	optional uint64 LocalTime		= 11;
+	repeated PositionInfo Position		= 12;
+	repeated OrderInfo	Order		= 13;
+	optional double Settlement		= 14;
+	optional ConstDefine Type		= 15 [default = E_DepthMarketData];
+}
+
+message StaticMarketData
+{
+	optional string TickerName		= 1;
+	optional uint64 Time	 		= 2;
+	optional uint64 PreOpenInterest 	= 3;
+	optional double PreSettlementPrice	= 4;
+	optional double PreClosePrice 		= 5;
+	optional double OpenPrice 		= 6;
+	optional double HighestPrice 		= 7;
+	optional double LowestPrice 		= 8;
+	optional double ClosePrice 		= 9;
+	optional double UpperLimitPrice		= 10;
+	optional double LowerLimitPrice		= 11;
+	optional double SettlementPrice		= 12;
+	repeated PositionInfo Position		= 13;
+	repeated OrderInfo	Order		= 14;
+	optional ConstDefine Type		= 15 [default = E_StaticMarketData];
+}
+
+message TOHLCV
+{
+	optional uint64 StartTime		= 1;
+	optional uint64 EndTime			= 2;
+	optional double OpenPrice		= 3;
+	optional double HighPrice		= 4;
+	optional double LowPrice		= 5;
+	optional double ClosePrice 		= 6;
+	optional uint64 Volume			= 7;
+	optional uint64 TotalVolume		= 8;
+	optional uint64 OpenInterest 		= 9;
+	optional double Turnover		= 10;
+	optional double Settlement		= 11;
+}
+
+
+message ReqKLine
+{
+	optional string TickerName		= 1;
+	optional uint64 StartTime 		= 2;
+	optional uint64 EndTime			= 3;
+	optional bool req_Minute		= 4 [default = false];
+	optional bool req_Day			= 5 [default = false];
+	optional bool req_Second		= 6 [default = false];
+	optional uint64 num_Seconds		= 7 [default = 1];
+	optional uint64 num_Minutes		= 8 [default = 1];
+	optional uint64 num_Days		= 9 [default = 1];
+	optional ConstDefine Type		= 10 [default = E_ReqKLine];
+}
+
+message RspKLine
+{
+	optional string TickerName		= 1;
+	optional uint64 StartTime		= 2;
+	optional uint64 EndTime			= 3;
+	repeated TOHLCV Bar_Minute		= 4;
+	repeated TOHLCV Bar_Day			= 5;
+	repeated TOHLCV Bar_Second		= 6;
+	optional uint64 num_Seconds		= 7 [default = 1];
+	optional uint64 num_Minutes		= 8 [default = 1];
+	optional uint64 num_Days		= 9 [default = 1];
+	optional ConstDefine Type		= 14 [default = E_RspKLine];
+}
+
+message ReqTick
+{
+	optional string TickerName		= 1;
+	optional uint64 StartTime		= 2;
+	optional uint64 EndTime			= 3;
+	optional ConstDefine Type		= 4 [default = E_ReqTick];
+}
+
+message RspTick
+{
+	optional string TickerName		= 1;
+	optional uint64 StartTime 		= 2;
+	optional uint64 EndTime			= 3;
+	repeated DepthMarketData Ticks		= 4;
+	optional ConstDefine Type		= 5 [default = E_RspTick];
+}
+
+message HeartBeat
+{
+	optional ConstDefine Type 		= 1 [default = E_HeartBeat];
+}
